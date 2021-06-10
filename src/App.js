@@ -1,25 +1,63 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState, useEffect, useRef } from 'react';
+import p5 from 'p5';
+import { sketch } from './sketches/target';
+import playIcon from './icons/play.svg';
+import stopIcon from './icons/stop.svg';
+import reloadIcon from './icons/reload.svg';
 
-function App() {
+const play = (p5) => {
+  p5.loop();
+};
+
+const stopSketch = (p5) => {
+  p5.noLoop();
+};
+
+const reload = (p5Instance, canvasContainer) => {
+  p5Instance.current.remove();
+  p5Instance.current = new p5(sketch, canvasContainer.current);
+};
+
+const App = () => {
+  const [stopped, setStopped] = useState(false);
+  const canvasContainer = useRef(null);
+  const p5Instance = useRef(null);
+
+  useEffect(() => {
+    if (p5Instance.current) {
+      p5Instance.current.remove();
+    }
+
+    p5Instance.current = new p5(sketch, canvasContainer.current);
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <main ref={canvasContainer} />
+      <nav>
+        <button
+          onClick={() => {
+            if (stopped) {
+              play(p5Instance.current);
+            } else {
+              stopSketch(p5Instance.current);
+            }
+
+            setStopped(!stopped);
+          }}>
+          <img src={stopped ? playIcon : stopIcon} />
+        </button>
+
+        <button
+          onClick={() => {
+            reload(p5Instance, canvasContainer);
+            setStopped(false);
+          }}>
+          <img src={reloadIcon} />
+        </button>
+      </nav>
+    </>
   );
-}
+};
 
 export default App;
