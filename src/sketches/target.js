@@ -3,7 +3,7 @@ const randomInt = (max) => {
 };
 
 export const sketch = (p5) => {
-  const colors = ['#FFC857', '#E9724C', '#C5283D', '#481D24', '#255F85'];
+  const colors = ['#355070', '#6D597A', '#B56576', '#E56B6F', '#EAAC8B'];
   let count = randomInt(5);
   const widthHeight = 768;
 
@@ -14,7 +14,7 @@ export const sketch = (p5) => {
   };
 
   p5.draw = () => {
-    for (let i = widthHeight; i >= 0; i = i - 120) {
+    for (let i = widthHeight; i >= 0; i = i - 50) {
       const color = colors[count];
       console.log(color);
 
